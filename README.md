@@ -56,6 +56,63 @@ JobPath AI aims to:
 
 ---
 
+## 🚀 Quick Setup Guide
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm (v8 or higher)
+
+### Installation Steps
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Yassineachkhity/JobPathAI.git
+cd JobPathAI
+```
+
+2. If you encounter any issues with node_modules, follow these steps:
+
+```bash
+# Remove existing node_modules and lock files
+rm -rf node_modules
+rm package-lock.json
+
+# Clear npm cache
+npm cache clean --force
+
+# Install dependencies
+npm install
+
+# If you still get errors, try:
+npm install --legacy-peer-deps
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+### 🔧 Troubleshooting Common Issues
+
+1. **TailwindCSS not working:**
+```bash
+# Reinstall TailwindCSS dependencies
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+2. **TypeScript errors:**
+```bash
+# Install TypeScript dependencies
+npm install -D typescript @types/node @types/react @types/react-dom
+```
+
+3. **Vite issues:**
+```bash
+# Reinstall Vite
+npm install -D vite @vitejs/plugin-react
+```
+
 ## 💻 Technology Stack
 
 ### **Frontend**
@@ -64,7 +121,14 @@ JobPath AI aims to:
 ### **Job Search APIs**
 - Integration with platforms like Adzuna, Jooble, or CareerJet to access job listings.
 
----
+## 🛠️ Tech Stack
+- React
+- TypeScript
+- TailwindCSS
+- Vite
+
+## 📝 Note
+If you encounter any other issues during setup, please open an issue in the repository.
 
 ## 🌟 User Experience
 
@@ -74,5 +138,9 @@ JobPath AI aims to:
 
 ---
 
+## 👥 Contributors
+- Yassine Achkhity
+- Adnane Karmouch
+- Assim Ayoub
 
 ## Created By : ACHKHITY YASSINE in Collaboration with ASSIM AYOUB and KARMOUCH ADNANE
