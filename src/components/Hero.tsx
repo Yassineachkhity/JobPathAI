@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -87,9 +88,11 @@ const Hero: React.FC = () => {
           <Button variant="primary" className="text-lg px-8 py-3">
             Chercher un emploi
           </Button>
-          <Button variant="secondary" className="text-lg px-8 py-3">
-            Créer un CV
-          </Button>
+          <Link to={'/resume'}>
+            <Button variant="secondary" className="text-lg px-8 py-3">
+              Créer un CV
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
