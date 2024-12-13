@@ -11,11 +11,15 @@
   },
   "dependencies": {
     "@react-three/fiber": "^8.17.10",
+    "@types/react-router-dom": "^5.3.3",
     "@types/three": "^0.170.0",
     "framer-motion": "^11.13.5",
     "lucide-react": "^0.468.0",
+    "pdf-parse": "^1.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-dropzone": "^14.3.5",
+    "react-router-dom": "^7.0.2",
     "three": "^0.171.0"
   },
   "devDependencies": {
