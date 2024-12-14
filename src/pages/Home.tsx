@@ -1,8 +1,8 @@
+import React from 'react';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Partners from '../components/Partners';
 import Footer from '../components/Footer';
-
 import './../styles/index.css'
 
 function Home() {
