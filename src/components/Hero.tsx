@@ -92,8 +92,7 @@ const Hero: React.FC = () => {
             className="rounded-md bg-blue-600 px-8 py-3 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Chercher un emploi
-
-          </Button>
+          </button>
           <Link to={'/resume'}>
             <Button variant="secondary" className="text-lg px-8 py-3">
               Créer un CV
