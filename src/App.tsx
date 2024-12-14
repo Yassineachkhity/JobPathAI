@@ -1,29 +1,20 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom'; // Keep Outlet for nested routes
 import { Toaster } from 'sonner';
 import Header from './components/Header';
 import './styles/index.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import JobSearch from './pages/JobSearch';
 
 function App() {
   return (
-    <Router>
+    <>
       {/* Global Header */}
       <Header />
 
-      {/* Define routes */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/job-search" element={<JobSearch />} />
-        
-        {/* This is where Outlet renders child components in nested routes */}
-        <Route path="/*" element={<Outlet />} />
-      </Routes>
+      {/* Define nested routes using Outlet */}
+      <Outlet />
 
       {/* Global Toaster */}
       <Toaster />
-    </Router>
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const JobSearch: React.FC = () => {
@@ -61,7 +60,6 @@ const JobSearch: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
