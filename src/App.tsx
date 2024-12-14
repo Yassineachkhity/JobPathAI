@@ -1,23 +1,20 @@
-import React from 'react';
-import './styles/index.css'
-import Hero from './components/Hero';
-import Features from './components/Features';
-import Partners from './components/Partners';
+import { Outlet } from 'react-router-dom'; // Keep Outlet for nested routes
+import { Toaster } from 'sonner';
 import Header from './components/Header';
-import Footer from './components/Footer';
+import './styles/index.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
- 
+    <>
+      {/* Global Header */}
       <Header />
-      <main>
-        <Hero />
-        <Features />
-        <Partners />
-      </main>
-      <Footer />
-    </div>
+
+      {/* Define nested routes using Outlet */}
+      <Outlet />
+
+      {/* Global Toaster */}
+      <Toaster />
+    </>
   );
 }
 
