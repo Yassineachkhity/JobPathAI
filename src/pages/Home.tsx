@@ -3,20 +3,22 @@ import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Partners from '../components/Partners';
 import Footer from '../components/Footer';
-import Header from '../components/Header';
+import './../styles/index.css'
 
-const Home: React.FC = () => {
-  return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main>
+function Home() {
+    return (
+        <div>
+        <div className="min-h-screen bg-white">
+        
+        <main>
         <Hero />
         <Features />
         <Partners />
-      </main>
-      <Footer />
-    </div>
-  );
-};
+        </main>
+        <Footer />
+        </div>
+        </div>
+    )
+}
 
-export default Home;
+export default Home
