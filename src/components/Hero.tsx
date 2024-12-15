@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import Button from './Button';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Initialisation de la scène, de la caméra et du renderer
@@ -84,12 +87,18 @@ const Hero: React.FC = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-          <Button variant="primary" className="text-lg px-8 py-3">
+          <button
+            onClick={() => navigate('/job-search')}
+            className="rounded-md bg-blue-600 px-8 py-3 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
             Chercher un emploi
-          </Button>
-          <Button variant="secondary" className="text-lg px-8 py-3">
-            Créer un CV
-          </Button>
+          </button>
+          <Link to={'/resume'}>
+            <Button variant="secondary" className="text-lg px-8 py-3">
+              Créer un CV
+            </Button>
+          </Link>
+
         </div>
       </div>
     </div>
