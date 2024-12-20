@@ -1,151 +1,196 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import axios from 'axios';
 import Footer from '../components/Footer';
+import { extractTextFromPDF } from '../utils/pdfjs';
+
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI('AIzaSyDwztTGZTJGE2gJeMdQxg4DywxzHS1J5ag');
 
 const JobSearch: React.FC = () => {
-  const [cvText, setCvText] = useState<string>('');
+  const [pdfText, setPdfText] = useState<string>('');
+  const [skills, setSkills] = useState<string[]>([]);
   const [jobs, setJobs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
+  // Analyze skills using Gemini AI
+  const analyzeSkills = async (text: string) => {
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const prompt = `Extract and list only the technical skills and hard skills from the following resume text. Format the output as a comma-separated list of keywords: ${text}`;
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const skillsList = response.text().split(',').map(skill => skill.trim());
+      return skillsList.filter(skill => skill.length > 0);
+    } catch (error) {
+      console.error('Error analyzing skills:', error);
+      throw new Error('Failed to analyze skills');
+    }
+  };
+
+  // Search for jobs using the skills
+  const searchJobs = async (skills: string[]) => {
+    try {
+      // Using a mock API call for demonstration
+      // Replace with your actual job search API
+      const response = await axios.get(`https://api.jobs.example.com/search?skills=${skills.join(',')}`);
+      return response.data.jobs;
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      // For demonstration, return mock data
+      return [
+        {
+          id: 1,
+          title: 'Senior Software Engineer',
+          company: 'Tech Corp',
+          location: 'Paris, France',
+          applyUrl: '#'
+        },
+        {
+          id: 2,
+          title: 'Full Stack Developer',
+          company: 'Startup Inc',
+          location: 'Remote',
+          applyUrl: '#'
+        }
+      ];
+    }
+  };
+
+  // Handle file drop
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      setLoading(true);
-      try {
-        // Read the PDF file
-        const formData = new FormData();
-        formData.append('file', file);
+    setLoading(true);
+    setError('');
+    
+    try {
+      const file = acceptedFiles[0];
+      if (file && file.type === 'application/pdf') {
+        const text = await extractTextFromPDF(file);
+        setPdfText(text);
         
-        // Here you would make an API call to your backend to process the CV
-        // For now, we'll mock the response
-        setTimeout(() => {
-          setJobs([
-            {
-              title: 'Senior Front End Developer',
-              company: 'TechCorp',
-              location: 'Casablanca',
-              match: '95%'
-            },
-            {
-              title: 'Frontend Developer',
-              company: 'InnovTech',
-              location: 'Casablanca',
-              match: '90%'
-            },
-            {
-              title: 'React Developer',
-              company: 'WebSolutions',
-              location: 'Rabat',
-              match: '85%'
-            }
-          ]);
-          setSuggestions(['React', 'TypeScript', 'TailwindCSS']);
-          setLoading(false);
-        }, 2000);
-      } catch (error) {
-        console.error('Error processing CV:', error);
-        setLoading(false);
+        const extractedSkills = await analyzeSkills(text);
+        setSkills(extractedSkills);
+        
+        const jobResults = await searchJobs(extractedSkills);
+        setJobs(jobResults);
+      } else {
+        throw new Error('Please upload a PDF file');
       }
+    } catch (err: any) {
+      setError(err.message);
+      console.error('Error processing file:', err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'application/pdf': ['.pdf'],
+      'application/pdf': ['.pdf']
     },
-    maxFiles: 1
+    multiple: false
   });
 
   return (
     <div className="min-h-screen bg-white">
-      
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto">
-          <div 
-            {...getRootProps()} 
-            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-              ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}`}
-          >
-            <input {...getInputProps()} />
-            <div className="flex flex-col items-center">
-              <svg 
-                className="w-12 h-12 text-gray-400 mb-4" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                />
-              </svg>
-              <p className="text-lg text-gray-600">
-                {isDragActive ? 'Drop your CV here' : 'Sélectionnez votre CV'}
-              </p>
-              <p className="text-sm text-gray-500 mt-2">PDF only</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-8">Job Search</h1>
+        
+        {/* PDF Upload Zone */}
+        <div
+          {...getRootProps()}
+          className={`p-10 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors
+            ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}`}
+        >
+          <input {...getInputProps()} />
+          <div className="space-y-2">
+            <svg
+              className="mx-auto h-12 w-12 text-gray-400"
+              stroke="currentColor"
+              fill="none"
+              viewBox="0 0 48 48"
+              aria-hidden="true"
+            >
+              <path
+                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <p className="text-lg text-gray-600">
+              {isDragActive
+                ? 'Drop your resume here...'
+                : 'Drag and drop your resume, or click to select'}
+            </p>
+            <p className="text-sm text-gray-500">PDF files only</p>
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {loading && (
+          <div className="mt-8 text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
+            <p className="mt-2 text-gray-600">Analyzing your resume...</p>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="mt-8 p-4 bg-red-50 rounded-lg">
+            <p className="text-red-600">{error}</p>
+          </div>
+        )}
+
+        {/* Skills Section */}
+        {skills.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Identified Skills</h2>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
+        )}
 
-          {loading && (
-            <div className="mt-8 text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Analyzing your CV...</p>
-            </div>
-          )}
-
-          {jobs.length > 0 && !loading && (
-            <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4">Suggestions</h2>
-              <div className="flex gap-2 mb-6">
-                {suggestions.map((skill, index) => (
-                  <span 
-                    key={index}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-
-              <div className="space-y-4">
-                {jobs.map((job, index) => (
-                  <div 
-                    key={index}
-                    className="border rounded-lg p-4 hover:shadow-lg transition-shadow"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-lg">{job.title}</h3>
-                        <p className="text-gray-600">{job.company}</p>
-                        <p className="text-gray-500 text-sm mt-1">
-                          <span className="inline-flex items-center">
-                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            {job.location}
-                          </span>
-                        </p>
-                      </div>
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                        {job.match} Match
-                      </span>
-                    </div>
-                    <button className="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium">
-                      View More →
-                    </button>
+        {/* Jobs Section */}
+        {jobs.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Matching Jobs</h2>
+            <div className="space-y-4">
+              {jobs.map((job) => (
+                <div
+                  key={job.id}
+                  className="p-6 bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
+                >
+                  <h3 className="text-xl font-semibold text-gray-900">{job.title}</h3>
+                  <p className="mt-2 text-gray-600">{job.company}</p>
+                  <p className="text-gray-500">{job.location}</p>
+                  <div className="mt-4">
+                    <a
+                      href={job.applyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+                    >
+                      Apply Now
+                    </a>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-      </main>
-
+          </div>
+        )}
+      </div>
       <Footer />
     </div>
   );
