@@ -4,9 +4,10 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
 import Footer from '../components/Footer';
 import { extractTextFromPDF } from '../utils/pdfjs';
+import.meta.env.VITE_GEMINI_API_KEY
 
 // Initialize Gemini AI
-const genAI = new GoogleGenerativeAI('AIzaSyDwztTGZTJGE2gJeMdQxg4DywxzHS1J5ag');
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
 const JobSearch: React.FC = () => {
   const [pdfText, setPdfText] = useState<string>('');

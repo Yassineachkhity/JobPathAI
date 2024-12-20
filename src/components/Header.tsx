@@ -50,7 +50,7 @@ const Header = () => {
       
       <div className="relative z-10 flex items-center h-full max-w-4xl p-6">
         <div className="text-white text-2xl font-bold px-4 hover:text-blue-200 transition-colors duration-300">
-          <a href="../../index.html" className="flex items-center">
+          <a href="/" className="flex items-center">
             <span className="mr-2">JobPath</span>
             <span className="text-blue-300">AI</span>
           </a>

@@ -1,10 +1,10 @@
 export default{
-    firstName:'James',
-    lastName:'Carter',
+    firstName:'ENSAM',
+    lastName:'IAGI-2',
     jobTitle:'full stack developer',
-    address:'525 N tryon Street, NC 28117',
+    address:'Casablanca',
     phone:'(123)-456-7890',
-    email:'exmaple@gmail.com',
+    email:'ensam@gmail.com',
     themeColor:"#ff6666",
     summary:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     experience:[
@@ -12,9 +12,9 @@ export default{
             id:1,
             title:'Full Stack Developer',
             companyName:'Amazon',
-            city:'New York',
-            state:'NY',
-            startDate:'Jan 2021',
+            city:'Casablanca',
+            state:'CA',
+            startDate:'Jan 2024',
             endDate:'',
             currentlyWorking:true,
             worksummary:' Designed, developed, and maintained full-stack applications using React and Node.js.\n'+
@@ -28,10 +28,10 @@ export default{
             id:2,
             title:'Frontend Developer',
             companyName:'Google',
-            city:'Charlotte',
-            state:'NC',
-            startDate:'May 2019',
-            endDate:'Jan 2021',
+            city:'Rabat',
+            state:'RB',
+            startDate:'May 2024',
+            endDate:'Jan 2024',
             currentlyWorking:false,
             worksummary:' Designed, developed, and maintained full-stack applications using React and Node.js.'+
             '• Implemented responsive user interfaces with React, ensuring seamless user experiences across'+
@@ -44,16 +44,16 @@ export default{
     education:[
         {
             id:1,
-            universityName:'Western Illinois University',
+            universityName:'ENSAM CASABLANCA',
             startDate:'Aug 2018',
             endDate:'Dec:2019',
-            degree:'Master',
+            degree:'Engineer',
             major:'Computer Science',
             description:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud'
         },
         {
             id:2,
-            universityName:'Western Illinois University',
+            universityName:'ENSAM CASABLANCA',
             startDate:'Aug 2018',
             endDate:'Dec:2019',
             degree:'Master',
